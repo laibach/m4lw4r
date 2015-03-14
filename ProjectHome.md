@@ -1,0 +1,1 @@
+fast and easy sample only to look if the strutur and gameplay is working
