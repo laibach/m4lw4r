@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using Microsoft.VisualBasic;
 
 
 namespace M4LW4R
@@ -17,17 +18,20 @@ namespace M4LW4R
         public Form1()
         {
             InitializeComponent();
+            listBoxMoeglicheMissionen.SelectedIndexChanged += new EventHandler(listBoxMoeglicheMissionen_SelectedIndexChanged);
         }
 
         Skill[] GameSkills = new Skill[9];
-        Mission[] GameMissions = new Mission[5];
+        Mission[] GameMissions = new Mission[6];
+        private decimal playerMoney = 0;
+        private List<string> playerResources = new List<string>();
         SQLiteWrapper mwsqlite = new SQLiteWrapper();
 
         private void Form1_Load(object sender, EventArgs e)
         {
             // mwsqlite.erstelle_M4lw4rDB();
             HoleSkills();
-            HoleMissions();            
+            HoleMissions();
         }
 
         private void HoleMissions()
@@ -44,14 +48,14 @@ namespace M4LW4R
             GameMissions[1].MissionsName = "Resource 'Grossrechner' gefunden.";
             GameMissions[1].MissionsText = "Ich habe einen Grossrechner gefunden, der von mit nun übernommen wird.";
             GameMissions[1].brauchtSkill = "Rechner übernehmen";
-            GameMissions[1].hatAntwort = 0;
-            GameMissions[1].Antwort1 = "";
+            GameMissions[1].hatAntwort = 1;
+            GameMissions[1].Antwort1 = "Grossrechner für CPU-Nutzung vermieten";
             GameMissions[1].Antwort1_IstMission = "";
-            GameMissions[1].Antwort1_Belohnung_Skill1 = "";
+            GameMissions[1].Antwort1_Belohnung_Skill1 = "CPU-Nutzung";
             GameMissions[1].Antwort1_Belohnung_Skill2 = "";
             GameMissions[1].Antwort1_Belohnung_Skill3 = "";
-            GameMissions[1].Antwort1_Belohnung_Money = 0;
-            GameMissions[1].Antwort1_Belohnung_Resource = "";
+            GameMissions[1].Antwort1_Belohnung_Money = 100;
+            GameMissions[1].Antwort1_Belohnung_Resource = "Grossrechner";
             GameMissions[1].Antwort2 = "";
             GameMissions[1].Antwort2_IstMission = "";
             GameMissions[1].Antwort2_Belohnung_Skill1 = "";
@@ -82,7 +86,7 @@ namespace M4LW4R
             GameMissions[2].Antwort1_Belohnung_Money = 0;
             GameMissions[2].Antwort1_Belohnung_Resource = "";
             GameMissions[2].Antwort2 = "Geiselnehmer bei FBI melden";
-            GameMissions[2].Antwort2_IstMission = "";
+            GameMissions[2].Antwort2_IstMission = "Geiselnehmer bei FBI melden";
             GameMissions[2].Antwort2_Belohnung_Skill1 = "";
             GameMissions[2].Antwort2_Belohnung_Skill2 = "";
             GameMissions[2].Antwort2_Belohnung_Skill3 = "";
@@ -100,59 +104,27 @@ namespace M4LW4R
             GameMissions[3].hatMission = true;
             GameMissions[3].istHauptmission = false;
             GameMissions[3].MissionsName = "Töte den Geiselnehmer";
-            GameMissions[3].MissionsText = "Unser Magier hat ihn getötet";
+            GameMissions[3].MissionsText = "Der Geiselnehmer wurde eliminiert.";
             GameMissions[3].brauchtSkill = "";
             GameMissions[3].hatAntwort = 0;
-            GameMissions[3].Antwort1 = "";
-            GameMissions[3].Antwort1_IstMission = "";
-            GameMissions[3].Antwort1_Belohnung_Skill1 = "";
-            GameMissions[3].Antwort1_Belohnung_Skill2 = "";
-            GameMissions[3].Antwort1_Belohnung_Skill3 = "";
-            GameMissions[3].Antwort1_Belohnung_Money = 0;
-            GameMissions[3].Antwort1_Belohnung_Resource = "";
-            GameMissions[3].Antwort2 = "";
-            GameMissions[3].Antwort2_IstMission = "";
-            GameMissions[3].Antwort2_Belohnung_Skill1 = "";
-            GameMissions[3].Antwort2_Belohnung_Skill2 = "";
-            GameMissions[3].Antwort2_Belohnung_Skill3 = "";
-            GameMissions[3].Antwort2_Belohnung_Money = 0;
-            GameMissions[3].Antwort2_Belohnung_Resource = "";
-            GameMissions[3].Antwort3 = "";
-            GameMissions[3].Antwort3_IstMission = "";
-            GameMissions[3].Antwort3_Belohnung_Skill1 = "";
-            GameMissions[3].Antwort3_Belohnung_Skill2 = "";
-            GameMissions[3].Antwort3_Belohnung_Skill3 = "";
-            GameMissions[3].Antwort3_Belohnung_Money = 0;
-            GameMissions[3].Antwort3_Belohnung_Resource = "";
+            GameMissions[3].IstFolgeMission = "Spiel abgeschlossen!";
 
             GameMissions[4] = new Mission();
             GameMissions[4].hatMission = true;
             GameMissions[4].istHauptmission = false;
             GameMissions[4].MissionsName = "Geiselnehmer bei FBI melden";
-            GameMissions[4].MissionsText = "Unser Magier hat ihn gemeldet";
+            GameMissions[4].MissionsText = "Der Geiselnehmer wurde dem FBI gemeldet. Sie kümmern sich darum.";
             GameMissions[4].brauchtSkill = "";
             GameMissions[4].hatAntwort = 0;
-            GameMissions[4].Antwort1 = "";
-            GameMissions[4].Antwort1_IstMission = "";
-            GameMissions[4].Antwort1_Belohnung_Skill1 = "";
-            GameMissions[4].Antwort1_Belohnung_Skill2 = "";
-            GameMissions[4].Antwort1_Belohnung_Skill3 = "";
-            GameMissions[4].Antwort1_Belohnung_Money = 0;
-            GameMissions[4].Antwort1_Belohnung_Resource = "";
-            GameMissions[4].Antwort2 = "";
-            GameMissions[4].Antwort2_IstMission = "";
-            GameMissions[4].Antwort2_Belohnung_Skill1 = "";
-            GameMissions[4].Antwort2_Belohnung_Skill2 = "";
-            GameMissions[4].Antwort2_Belohnung_Skill3 = "";
-            GameMissions[4].Antwort2_Belohnung_Money = 0;
-            GameMissions[4].Antwort2_Belohnung_Resource = "";
-            GameMissions[4].Antwort3 = "";
-            GameMissions[4].Antwort3_IstMission = "";
-            GameMissions[4].Antwort3_Belohnung_Skill1 = "";
-            GameMissions[4].Antwort3_Belohnung_Skill2 = "";
-            GameMissions[4].Antwort3_Belohnung_Skill3 = "";
-            GameMissions[4].Antwort3_Belohnung_Money = 0;
-            GameMissions[4].Antwort3_Belohnung_Resource = "";
+            GameMissions[4].IstFolgeMission = "Spiel abgeschlossen!";
+
+            GameMissions[5] = new Mission();
+            GameMissions[5].hatMission = true;
+            GameMissions[5].istHauptmission = false;
+            GameMissions[5].MissionsName = "Spiel abgeschlossen!";
+            GameMissions[5].MissionsText = "Die Geiselnahme wurde beendet. Gute Arbeit.";
+            GameMissions[5].brauchtSkill = "";
+            GameMissions[5].hatAntwort = 0;
         }
         private void HoleSkills()
         {
@@ -168,19 +140,16 @@ namespace M4LW4R
                 GameSkills[i].SkillText = SkillStoryBoard[i].SkillText;
                 GameSkills[i].Hauptskill = SkillStoryBoard[i].HauptSkill;
                 GameSkills[i].IstNebenSkill = SkillStoryBoard[i].IstNebenSkill;
-                // GameSkills[i].SkillButton.Location = new Point(StartX, StartY);
                 if (GameSkills[i].IstNebenSkill == false)
                 {
                     StartY = StartY + GameSkills[i].SkillButton.Height + 10;
                     StartX = 10;
-                } 
-                
+                }
+
                 GameSkills[i].initSkill(StartX, StartY, i);
                 this.panel1.Controls.Add(GameSkills[i].SkillButton);
 
                 StartX = StartX + GameSkills[i].SkillButton.Width + 10;
-
-               
             }
         }
 
@@ -203,7 +172,6 @@ namespace M4LW4R
             SkillStoryBoard[2] = new Skills();
             SkillStoryBoard[2].HauptSkill = "Malware Erstellen";
             SkillStoryBoard[2].IstNebenSkill = true;
-                ;
             SkillStoryBoard[2].SkillName = "Rechner übernehmen";
             SkillStoryBoard[2].SkillText = "Hiermit können fremde Rechner unter ihre Kontrolle gebracht werden";
 
@@ -246,63 +214,58 @@ namespace M4LW4R
 
         private void timerGame_Tick(object sender, EventArgs e)
         {
-            // wennZufall
+            List<Mission> moeglicheMissionen = new List<Mission>();
+            HashSet<string> addedMissions = new HashSet<string>();
 
-            int Anzahl_moegliche_Missionen = 999;
-
-            Mission[] zufallsmissionen = new Mission[Anzahl_moegliche_Missionen];
-            int gefundeneMissionsZaehler = 0;
-            for (int i=-1; i<GameSkills.Length;i++)
+            // Add unlocked missions
+            foreach (Mission mission in GameMissions)
             {
-                bool sollSuchen = false;
-
-                String gskill = "";
-                if (i == -1)
+                if (mission.hatMission && mission.istFreigeschaltet && !addedMissions.Contains(mission.MissionsName))
                 {
-                    gskill = "";
-                    sollSuchen = true;
+                    moeglicheMissionen.Add(mission);
+                    addedMissions.Add(mission.MissionsName);
                 }
-                else
-                {
-                    gskill = GameSkills[i].SkillName;
-                    if (GameSkills[i].hatSkill)
-                        sollSuchen = true;
-                }
+            }
 
-                if (sollSuchen)
+            // Add missions based on skills
+            foreach (Skill skill in GameSkills)
+            {
+                if (skill.hatSkill)
                 {
-                    Mission[] gefundenMissionen = holeMissionenNachSkill(gskill);
-                    if (gefundenMissionen != null)
+                    foreach (Mission mission in GameMissions)
                     {
-                        for (int i2 = 0; i2 < gefundenMissionen.Length; i2++)
+                        if (mission.hatMission && mission.istHauptmission && mission.brauchtSkill == skill.SkillName && !addedMissions.Contains(mission.MissionsName))
                         {
-                            zufallsmissionen[gefundeneMissionsZaehler] = gefundenMissionen[i2];
-                            gefundeneMissionsZaehler++;
+                            moeglicheMissionen.Add(mission);
+                            addedMissions.Add(mission.MissionsName);
                         }
                     }
                 }
             }
-
-            if (gefundeneMissionsZaehler > 0)
+            // Add missions with no required skill
+            foreach (Mission mission in GameMissions)
             {
-                // MessageBox.Show("Missionen gefunden: " + gefundeneMissionsZaehler.ToString());
-                listBoxMoeglicheMissionen.Items.Clear();
-                for (int i3=0; i3<gefundeneMissionsZaehler; i3++)
+                if (mission.hatMission && mission.istHauptmission && string.IsNullOrEmpty(mission.brauchtSkill) && !addedMissions.Contains(mission.MissionsName))
                 {
-                    listBoxMoeglicheMissionen.Items.Add(zufallsmissionen[i3].MissionsName + " " + zufallsmissionen[i3].MissionsText);
+                    moeglicheMissionen.Add(mission);
+                    addedMissions.Add(mission.MissionsName);
                 }
+            }
+
+            listBoxMoeglicheMissionen.Items.Clear();
+            foreach(Mission mission in moeglicheMissionen)
+            {
+                listBoxMoeglicheMissionen.Items.Add(mission.MissionsName);
             }
         }
 
         private int holeAnzahlMissionenNachSkill(String[] skills)
         {
             int anzahlMissionen = 0;
-
             for (int i = 0; i < skills.Length; i++)
             {
                 String skill = skills[i];
                 anzahlMissionen += holeAnzahlMissionenNachSkill(skill);
-
             }
             return anzahlMissionen;
         }
@@ -310,10 +273,9 @@ namespace M4LW4R
         private int holeAnzahlMissionenNachSkill(String skill)
         {
             int anzahlMissionen = 0;
-
             for (int i = 0; i < GameMissions.Length; i++)
             {
-                if (GameMissions[i].istHauptmission)
+                if (GameMissions[i].hatMission && GameMissions[i].istHauptmission)
                 {
                     if (GameMissions[i].brauchtSkill == skill)
                     {
@@ -321,31 +283,169 @@ namespace M4LW4R
                     }
                 }
             }
-
             return anzahlMissionen;
         }
 
         private Mission[] holeMissionenNachSkill(String skill)
         {
-            int anzahlGefundenerMissionen = holeAnzahlMissionenNachSkill(skill);
-            if (anzahlGefundenerMissionen > 0)
+            List<Mission> missionen = new List<Mission>();
+            for (int i = 0; i < GameMissions.Length; i++)
             {
-                Mission[] returnMission = new Mission[anzahlGefundenerMissionen];
-
-                int anzahlGefundenerMissionenZaehler = 0;
-                for (int i = 0; i < GameMissions.Length; i++)
+                if (GameMissions[i].hatMission && GameMissions[i].istHauptmission)
                 {
-                    if (GameMissions[i].istHauptmission)
+                    if (GameMissions[i].brauchtSkill == skill)
                     {
-                        if (GameMissions[i].brauchtSkill == skill)
-                        {
-                            returnMission[anzahlGefundenerMissionenZaehler] = GameMissions[i];
-                            anzahlGefundenerMissionenZaehler++;
-                        }
+                        missionen.Add(GameMissions[i]);
                     }
                 }
-                if (anzahlGefundenerMissionenZaehler > 0)
-                    return returnMission;
+            }
+            return missionen.ToArray();
+        }
+
+        private void listBoxMoeglicheMissionen_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxMoeglicheMissionen.SelectedItem == null)
+                return;
+
+            String missionName = listBoxMoeglicheMissionen.SelectedItem.ToString();
+            Mission selectedMission = getMissionByName(missionName);
+
+            if (selectedMission != null)
+            {
+                if (selectedMission.MissionsName == "Spiel abgeschlossen!")
+                {
+                    MessageBox.Show(selectedMission.MissionsText, selectedMission.MissionsName);
+                    MessageBox.Show("You have won the game!", "Congratulations!");
+                    Application.Exit();
+                    return;
+                }
+
+                String missionText = selectedMission.MissionsText;
+                String answers = "";
+                if (selectedMission.hatAntwort > 0)
+                {
+                    answers += "\n1: " + selectedMission.Antwort1;
+                }
+                if (selectedMission.hatAntwort > 1)
+                {
+                    answers += "\n2: " + selectedMission.Antwort2;
+                }
+                if (selectedMission.hatAntwort > 2)
+                {
+                    answers += "\n3: " + selectedMission.Antwort3;
+                }
+
+                if (selectedMission.hatAntwort > 0)
+                {
+                    string choiceStr = Interaction.InputBox(missionText + answers, selectedMission.MissionsName, "1");
+                    int choice;
+                    if (int.TryParse(choiceStr, out choice) && choice > 0 && choice <= selectedMission.hatAntwort)
+                    {
+                        ProcessMissionChoice(selectedMission, choice);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(missionText, selectedMission.MissionsName);
+                    if (!string.IsNullOrEmpty(selectedMission.IstFolgeMission))
+                    {
+                        Mission nextMission = getMissionByName(selectedMission.IstFolgeMission);
+                        if(nextMission != null) {
+                            nextMission.istFreigeschaltet = true;
+                        }
+                    }
+                    selectedMission.hatMission = false; // Mark as completed
+                    listBoxMoeglicheMissionen.Items.Remove(selectedMission.MissionsName);
+                }
+            }
+        }
+
+        private void ProcessMissionChoice(Mission mission, int choice)
+        {
+            String feedback = "Aktion ausgeführt!";
+            // Process rewards based on choice
+            if (choice == 1)
+            {
+                if (!string.IsNullOrEmpty(mission.Antwort1_Belohnung_Skill1))
+                    getSkillByName(mission.Antwort1_Belohnung_Skill1).hatSkill = true;
+                if (!string.IsNullOrEmpty(mission.Antwort1_Belohnung_Skill2))
+                    getSkillByName(mission.Antwort1_Belohnung_Skill2).hatSkill = true;
+                if (!string.IsNullOrEmpty(mission.Antwort1_Belohnung_Skill3))
+                    getSkillByName(mission.Antwort1_Belohnung_Skill3).hatSkill = true;
+                playerMoney += mission.Antwort1_Belohnung_Money;
+                if (!string.IsNullOrEmpty(mission.Antwort1_Belohnung_Resource))
+                    playerResources.Add(mission.Antwort1_Belohnung_Resource);
+                if (!string.IsNullOrEmpty(mission.Antwort1_IstMission))
+                {
+                    Mission nextMission = getMissionByName(mission.Antwort1_IstMission);
+                    if(nextMission != null) {
+                        nextMission.istFreigeschaltet = true;
+                        feedback += "\nNeue Mission freigeschaltet: " + mission.Antwort1_IstMission;
+                    }
+                }
+            }
+            else if (choice == 2)
+            {
+                if (!string.IsNullOrEmpty(mission.Antwort2_Belohnung_Skill1))
+                    getSkillByName(mission.Antwort2_Belohnung_Skill1).hatSkill = true;
+                if (!string.IsNullOrEmpty(mission.Antwort2_Belohnung_Skill2))
+                    getSkillByName(mission.Antwort2_Belohnung_Skill2).hatSkill = true;
+                if (!string.IsNullOrEmpty(mission.Antwort2_Belohnung_Skill3))
+                    getSkillByName(mission.Antwort2_Belohnung_Skill3).hatSkill = true;
+                playerMoney += mission.Antwort2_Belohnung_Money;
+                if (!string.IsNullOrEmpty(mission.Antwort2_Belohnung_Resource))
+                    playerResources.Add(mission.Antwort2_Belohnung_Resource);
+                if (!string.IsNullOrEmpty(mission.Antwort2_IstMission))
+                {
+                    Mission nextMission = getMissionByName(mission.Antwort2_IstMission);
+                    if(nextMission != null) {
+                        nextMission.istFreigeschaltet = true;
+                        feedback += "\nNeue Mission freigeschaltet: " + mission.Antwort2_IstMission;
+                    }
+                }
+            }
+            else if (choice == 3)
+            {
+                if (!string.IsNullOrEmpty(mission.Antwort3_Belohnung_Skill1))
+                    getSkillByName(mission.Antwort3_Belohnung_Skill1).hatSkill = true;
+                if (!string.IsNullOrEmpty(mission.Antwort3_Belohnung_Skill2))
+                    getSkillByName(mission.Antwort3_Belohung_Skill2).hatSkill = true;
+                if (!string.IsNullOrEmpty(mission.Antwort3_Belohnung_Skill3))
+                    getSkillByName(mission.Antwort3_Belohnung_Skill3).hatSkill = true;
+                playerMoney += mission.Antwort3_Belohnung_Money;
+                if (!string.IsNullOrEmpty(mission.Antwort3_Belohnung_Resource))
+                    playerResources.Add(mission.Antwort3_Belohnung_Resource);
+                if (!string.IsNullOrEmpty(mission.Antwort3_IstMission))
+                {
+                    Mission nextMission = getMissionByName(mission.Antwort3_IstMission);
+                    if(nextMission != null) {
+                        nextMission.istFreigeschaltet = true;
+                        feedback += "\nNeue Mission freigeschaltet: " + mission.Antwort3_IstMission;
+                    }
+                }
+            }
+
+            MessageBox.Show(feedback, "Missions-Update");
+            mission.hatMission = false; // Mission is completed
+            listBoxMoeglicheMissionen.Items.Remove(mission.MissionsName);
+        }
+
+        private Skill getSkillByName(string name)
+        {
+            foreach (Skill skill in GameSkills)
+            {
+                if (skill.SkillName == name)
+                    return skill;
+            }
+            return null;
+        }
+
+        private Mission getMissionByName(string name)
+        {
+            foreach (Mission mission in GameMissions)
+            {
+                if (mission.MissionsName == name)
+                    return mission;
             }
             return null;
         }
