@@ -9,6 +9,7 @@ namespace M4LW4R
     public class Mission
     {
         public bool hatMission = false;
+        public bool istFreigeschaltet = false;
         public String MissionsName = "";
         public String MissionsText = "";
         public bool istHauptmission = false;
@@ -37,5 +38,6 @@ namespace M4LW4R
         public String Antwort3_Belohnung_Skill3 = "";
         public Decimal Antwort3_Belohnung_Money = 0;
         public String Antwort3_Belohnung_Resource = "";
+        public string IstFolgeMission = "";
     }
 }
