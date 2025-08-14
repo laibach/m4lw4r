@@ -276,7 +276,6 @@ namespace M4LW4R
                     {
                         for (int i2 = 0; i2 < gefundenMissionen.Length; i2++)
                         {
-                            zufallsmissionen[gefundeneMissionsZaehler] = new Mission();
                             zufallsmissionen[gefundeneMissionsZaehler] = gefundenMissionen[i2];
                             gefundeneMissionsZaehler++;
                         }
@@ -340,7 +339,6 @@ namespace M4LW4R
                     {
                         if (GameMissions[i].brauchtSkill == skill)
                         {
-                            returnMission[anzahlGefundenerMissionenZaehler] = new Mission();
                             returnMission[anzahlGefundenerMissionenZaehler] = GameMissions[i];
                             anzahlGefundenerMissionenZaehler++;
                         }
